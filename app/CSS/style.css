@@ -1,0 +1,48 @@
+@font-face {
+    font-family: archia;
+    src: url("../fonts/Archia.otf");
+}
+
+* {
+    font-family: "archia";
+}
+
+#pageTitle {
+    font-weight: 900;
+    font-size: 32px;
+    color: #6c757d;
+    padding: 2rem 1rem 1rem 2rem;
+    text-align: center;
+
+}
+
+#indiaDataTable {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#countryData{
+    border: 1rem solid white;
+    text-align: center;
+    padding: .2rem;
+}
+
+.confirmedData{
+    background-color: rgba(255,7,58,.12549);
+    color: #ff073a;
+}
+
+.activeData{
+    background-color: rgba(0,123,255,.0627451);
+    color: #007bff;
+}
+
+.recoveredData{
+    background-color: rgba(40,167,69,.12549);
+    color: #28a745;
+}
+
+.deceasedData{
+    background-color: rgba(108,117,125,.0627451);
+    color: #6c757d;
+}
