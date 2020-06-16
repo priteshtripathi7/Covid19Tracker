@@ -1,6 +1,21 @@
 import * as CommonFunc from './modules/commonFunc.js';
 
-const app = angular.module('app', []);
+const app = angular.module("app", ["ngRoute"]);
+
+app.config(function ($routeProvider, $locationProvider) {
+  $locationProvider.hashPrefix("");
+  $routeProvider
+
+    .when("/", {
+      templateUrl: "pages/covidIndia.html",
+      controller: "tableDataCtrl",
+    })
+
+    .when("/world", {
+      templateUrl: "pages/covidWorld.html",
+      controller: "worldTableDataCtrl",
+    });
+});
 
 app.controller('tableDataCtrl', function($scope, $http) {
 
@@ -12,7 +27,6 @@ app.controller('tableDataCtrl', function($scope, $http) {
             function(result){
 
                 const states = result.data.statewise;
-
                 // India Country Data
                 $scope.countryData.push(
                     {
@@ -21,7 +35,6 @@ app.controller('tableDataCtrl', function($scope, $http) {
                         CSS: "confirmedData"
                     }
                 )
-
                 $scope.countryData.push(
                     {
                         CASE_TYPE : "Active",
@@ -29,7 +42,6 @@ app.controller('tableDataCtrl', function($scope, $http) {
                         CSS: "activeData"
                     }
                 )
-
                 $scope.countryData.push(
                     {
                         CASE_TYPE : "Recovered",
@@ -37,7 +49,6 @@ app.controller('tableDataCtrl', function($scope, $http) {
                         CSS: "recoveredData"
                     }
                 )
-
                 $scope.countryData.push(
                     {
                         CASE_TYPE : "Deceased",
@@ -72,4 +83,26 @@ app.controller('tableDataCtrl', function($scope, $http) {
                 console.log(status);
             }
         );
+});
+app.controller("worldTableDataCtrl", function ($scope, $http) {
+  $http.get("https://api.covid19api.com/summary").then(
+    function (result) {
+      //console.log(result);
+      $scope.countryData = result.data.Countries.map((countryObj) => {
+        return {
+          NAME: countryObj.Country,
+          CONFIRMED: countryObj.TotalConfirmed,
+          ACTIVE:
+            countryObj.TotalConfirmed -
+            (countryObj.TotalDeaths + countryObj.TotalRecovered),
+          DEATHS: countryObj.TotalDeaths,
+          RECOVERED: countryObj.TotalRecovered,
+        };
+      });
+    },
+    function (error, status) {
+      console.log(error);
+      console.log(status);
+    }
+  );
 });

@@ -1,0 +1,46 @@
+<!-- Page Heading -->
+<div id="pageTitle">
+  India Covid19 Updates
+</div>
+
+<!-- Total Country Data-->
+<div class="row">
+  <div id="countryData" ng-repeat="data in countryData" class="col-sm-3 col-md-3" ng-class="data.CSS">
+
+    <h5>{{ data.CASE_TYPE }}</h5>
+    <h3 style="font-weight: bold">{{ data.CASE_COUNT }}</h3>
+
+  </div>
+</div>
+
+<!-- StateWise Data -->
+<div class="row">
+
+  <div class="col-sm-12 col-md-6">
+    <table class="table table-hover table-sm" id="indiaDataTable" ng-cloak>
+      <thead>
+      <tr>
+        <th scope="col">State/UT</th>
+        <th scope="col">C</th>
+        <th scope="col">A</th>
+        <th scope="col">R</th>
+        <th scope="col">D</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="state in stateData">
+        <th scope="row">{{ state.NAME }}</th>
+        <td style="color: #ff073a"> {{ state.CONFIRMED }} </td>
+        <td style="color: #007bff"> {{ state.ACTIVE }} </td>
+        <td style="color: #28a745"> {{ state.RECOVERED }} </td>
+        <td style="color: #6c757d"> {{ state.DEATHS }} </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-sm-12 col-md-6">
+
+  </div>
+
+</div>
