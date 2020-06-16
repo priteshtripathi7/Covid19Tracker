@@ -1,0 +1,20 @@
+<table class="table table-hover" id="indiaDataTable" ng-cloak>
+  <thead>
+    <tr>
+      <th scope="col" data-sort-default>State/UT</th>
+      <th scope="col" data-sort-default>C</th>
+      <th scope="col" data-sort-default>A</th>
+      <th scope="col" data-sort-default>R</th>
+      <th scope="col" data-sort-default>D</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="state in stateData">
+      <th scope="row">{{ state.NAME }}</th>
+      <td>{{ state.CONFIRMED }}</td>
+      <td>{{ state.ACTIVE }}</td>
+      <td>{{ state.RECOVERED }}</td>
+      <td>{{ state.DEATHS }}</td>
+    </tr>
+  </tbody>
+</table>
