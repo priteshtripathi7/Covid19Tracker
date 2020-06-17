@@ -26,6 +26,7 @@
         <th scope="col">A</th>
         <th scope="col">R</th>
         <th scope="col">D</th>
+        <th scope="col"></th>
       </tr>
       </thead>
       <tbody>
@@ -35,15 +36,15 @@
         <td style="color: #007bff"> {{ state.ACTIVE }} </td>
         <td style="color: #28a745"> {{ state.RECOVERED }} </td>
         <td style="color: #6c757d"> {{ state.DEATHS }} </td>
+        <td>
+            <i class="fa fa-download" style="font-size: 14px" ng-click="generateStateReport(state.NAME)" aria-hidden="true"></i>
+        </td>
       </tr>
       </tbody>
     </table>
   </div>
 
   <!-- Right Panel -->
-
-
-
   <div class="col-sm-12 col-md-6">
 
     <div id="chartsTitle">

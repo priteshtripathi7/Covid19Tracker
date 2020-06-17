@@ -32,6 +32,30 @@ export function formatNumber(number){
     return ans.split("").reverse().join("");
 }
 
+/**
+ * Takes a number with ',' and returns without ','
+ * @param data : number to be parsed
+ * @returns {string} : returned cleaned number
+ */
 export function parseData(data){
     return data.split(',').join('');
+}
+
+/**
+ * Generates a download event
+ * @param filename : required file name to be saved as
+ * @param data : text to be written in the file
+ */
+export function generateDownload(filename = 'report.pdf', data){
+
+    let elem = document.createElement('a');
+    elem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+    elem.setAttribute('download', filename);
+
+    elem.style.display = 'none';
+    document.body.appendChild(elem);
+
+    elem.click();
+
+    document.body.removeChild(elem);
 }

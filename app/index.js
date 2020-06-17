@@ -22,6 +22,8 @@ app.controller('tableDataCtrl', function($scope, $http) {
     $scope.stateData =  [];
     $scope.countryData = [];
 
+    let confirmedChart, recoveredChart, activeChart, deceasedChart;
+
     $http.get('https://api.covid19india.org/data.json')
         .then(
             function(result){
@@ -114,8 +116,17 @@ app.controller('tableDataCtrl', function($scope, $http) {
 
     $scope.changeChartDisplayToCumulative = function() {
 
+        if(confirmedChart !== undefined)
+            confirmedChart.destroy();
+        if(activeChart !== undefined)
+            activeChart.destroy();
+        if(deceasedChart !== undefined)
+            activeChart.destroy();
+        if(recoveredChart !== undefined)
+            recoveredChart.destroy();
+
         const ctxConfirmed = document.getElementById('confirmedChart').getContext('2d');
-        const confirmedChart = new Chart(ctxConfirmed, {
+        confirmedChart = new Chart(ctxConfirmed, {
 
             type: 'line',
             data: {
@@ -130,7 +141,7 @@ app.controller('tableDataCtrl', function($scope, $http) {
         });
 
         const ctxActive = document.getElementById('activeChart').getContext('2d');
-        const activeChart = new Chart(ctxActive, {
+        activeChart = new Chart(ctxActive, {
 
             type: 'line',
             data: {
@@ -145,7 +156,7 @@ app.controller('tableDataCtrl', function($scope, $http) {
         });
 
         const ctxRecovered = document.getElementById('recoveredChart').getContext('2d');
-        const recoveredChart = new Chart(ctxRecovered, {
+        recoveredChart = new Chart(ctxRecovered, {
 
             type: 'line',
             data: {
@@ -160,7 +171,7 @@ app.controller('tableDataCtrl', function($scope, $http) {
         });
 
         const ctxDeceased = document.getElementById('deceasedChart').getContext('2d');
-        const deceasedChart = new Chart(ctxDeceased, {
+        deceasedChart = new Chart(ctxDeceased, {
 
             type: 'line',
             data: {
@@ -177,8 +188,17 @@ app.controller('tableDataCtrl', function($scope, $http) {
 
     $scope.changeChartDisplayToDaily = function() {
 
+        if(confirmedChart !== undefined)
+            confirmedChart.destroy();
+        if(activeChart !== undefined)
+            activeChart.destroy();
+        if(deceasedChart !== undefined)
+            activeChart.destroy();
+        if(recoveredChart !== undefined)
+            recoveredChart.destroy();
+
         const ctxConfirmed = document.getElementById('confirmedChart').getContext('2d');
-        const confirmedChart = new Chart(ctxConfirmed, {
+        confirmedChart = new Chart(ctxConfirmed, {
 
             type: 'bar',
             data: {
@@ -186,14 +206,13 @@ app.controller('tableDataCtrl', function($scope, $http) {
                 datasets: [{
                     label: 'Confirmed Cases',
                     backgroundColor: '#ff073aaa',
-                    borderColor: '#ff073aaa',
                     data: $scope.dailyData.CONFIRMED
                 }]
             },
         });
 
         const ctxActive = document.getElementById('activeChart').getContext('2d');
-        const activeChart = new Chart(ctxActive, {
+        activeChart = new Chart(ctxActive, {
 
             type: 'bar',
             data: {
@@ -201,14 +220,13 @@ app.controller('tableDataCtrl', function($scope, $http) {
                 datasets: [{
                     label: 'Active Cases',
                     backgroundColor: '#007bffaa',
-                    borderColor: '#007bffaa',
                     data: $scope.dailyData.ACTIVE
                 }]
             },
         });
 
         const ctxRecovered = document.getElementById('recoveredChart').getContext('2d');
-        const recoveredChart = new Chart(ctxRecovered, {
+        recoveredChart = new Chart(ctxRecovered, {
 
             type: 'bar',
             data: {
@@ -216,14 +234,13 @@ app.controller('tableDataCtrl', function($scope, $http) {
                 datasets: [{
                     label: 'Recovered Cases',
                     backgroundColor: '#28a745aa',
-                    borderColor: '#28a745aa',
                     data: $scope.dailyData.RECOVERED
                 }]
             },
         });
 
         const ctxDeceased = document.getElementById('deceasedChart').getContext('2d');
-        const deceasedChart = new Chart(ctxDeceased, {
+        deceasedChart = new Chart(ctxDeceased, {
 
             type: 'bar',
             data: {
@@ -231,14 +248,43 @@ app.controller('tableDataCtrl', function($scope, $http) {
                 datasets: [{
                     label: 'Deceased Cases',
                     backgroundColor: '#6c757daa',
-                    borderColor: '#6c757daa',
                     data: $scope.dailyData.DECEASED
                 }]
             },
         });
     }
 
+    $scope.generateStateReport = function(stateName) {
+
+        $http.get('https://api.covid19india.org/state_district_wise.json\n')
+            .then(
+                function(result){
+                    const stateData = result.data[stateName].districtData;
+                    const fileName = `${stateName.split(' ').join('_')}_report.txt`;
+
+                    let data = `Report for ${stateName}\n\n`;
+                    for(const district in stateData){
+                        const notes = stateData[district].notes === '' ? 'No' : stateData[district].notes;
+
+                        data = data + `District Name : ${district}\n`;
+                        data = data + `Total Confirmed Cases : ${ CommonFunc.formatNumber(stateData[district].confirmed) }\n`;
+                        data = data + `Total Active Cases : ${ CommonFunc.formatNumber(stateData[district].active) }\n`;
+                        data = data + `Total Recovered Cases : ${ CommonFunc.formatNumber(stateData[district].recovered) }\n`;
+                        data = data + `Total Deceased Cases : ${ CommonFunc.formatNumber(stateData[district].deceased) }\n`;
+                        data = data + `Any Other Notes : ${notes}\n\n`;
+                    }
+
+                    CommonFunc.generateDownload(fileName, data);
+                },
+                function(error, status){
+                    console.log(error);
+                    console.log(status);
+                }
+            );
+    }
 });
+
+
 app.controller("worldTableDataCtrl", function ($scope, $http) {
     $http.get("https://api.covid19api.com/summary").then(
         function (result) {
