@@ -46,3 +46,11 @@
     background-color: rgba(108,117,125,.0627451);
     color: #6c757d;
 }
+
+#chartsTitle{
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    padding: 2rem 0rem 1rem 0rem;
+    color: #6c757d;
+}

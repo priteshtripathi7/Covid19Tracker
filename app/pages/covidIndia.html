@@ -16,6 +16,7 @@
 <!-- StateWise Data -->
 <div class="row">
 
+  <!-- Left Panel -->
   <div class="col-sm-12 col-md-6">
     <table class="table table-hover table-sm" id="indiaDataTable" ng-cloak>
       <thead>
@@ -39,8 +40,42 @@
     </table>
   </div>
 
+  <!-- Right Panel -->
+
+
+
   <div class="col-sm-12 col-md-6">
 
+    <div id="chartsTitle">
+      Visualisation
+    </div>
+
+    <div class="row" style="text-align: center; padding: 0rem 0rem 1rem 0rem;">
+      <div class="col-sm-6">
+        <button ng-click="changeChartDisplayToCumulative()" type="button" class="btn btn-outline-secondary btn-sm">Cumulative</button>
+      </div>
+      <div class="col-sm-6">
+        <button ng-click="changeChartDisplayToDaily()" type="button" class="btn btn-outline-secondary btn-sm">Daily</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <canvas id="confirmedChart"></canvas>
+      </div>
+
+      <div class="col-sm-12">
+        <canvas id="activeChart"></canvas>
+      </div>
+
+      <div class="col-sm-12">
+        <canvas id="recoveredChart"></canvas>
+      </div>
+
+      <div class="col-sm-12">
+        <canvas id="deceasedChart"></canvas>
+      </div>
+    </div>
   </div>
 
 </div>
