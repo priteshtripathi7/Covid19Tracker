@@ -1,61 +1,128 @@
 @font-face {
-    font-family: archia;
-    src: url("../fonts/Archia.otf");
+  font-family: archia;
+  src: url("../fonts/Archia.otf");
 }
 
 * {
-    font-family: "archia";
+  font-family: "archia";
 }
 
 #pageTitle {
-    font-weight: 900;
-    font-size: 32px;
-    color: #6c757d;
-    padding: .5rem 0rem 1rem 0rem;
-    text-align: center;
-
+  font-weight: 900;
+  font-size: 32px;
+  color: #6c757d;
+  padding: 0.5rem 0rem 1rem 0rem;
+  text-align: center;
 }
 
 #indiaDataTable {
-    font-size: 14px;
-    font-weight: 600;
+  font-size: 14px;
+  font-weight: 600;
 }
 
-#countryData{
-    border: 1rem solid white;
-    text-align: center;
-    padding: .2rem;
+#countryData {
+  border: 1rem solid white;
+  text-align: center;
+  padding: 0.2rem;
 }
 
-.confirmedData{
-    background-color: rgba(255,7,58,.12549);
-    color: #ff073a;
+.confirmedData {
+  background-color: rgba(255, 7, 58, 0.12549);
+  color: #ff073a;
 }
 
-.activeData{
-    background-color: rgba(0,123,255,.0627451);
-    color: #007bff;
+.activeData {
+  background-color: rgba(0, 123, 255, 0.0627451);
+  color: #007bff;
 }
 
-.recoveredData{
-    background-color: rgba(40,167,69,.12549);
-    color: #28a745;
+.recoveredData {
+  background-color: rgba(40, 167, 69, 0.12549);
+  color: #28a745;
 }
 
-.deceasedData{
-    background-color: rgba(108,117,125,.0627451);
-    color: #6c757d;
+.deceasedData {
+  background-color: rgba(108, 117, 125, 0.0627451);
+  color: #6c757d;
 }
 
-.testedData{
-    background-color: rgba(255,193,7,.188235);
-    color: #fd7e14;
+.testedData {
+  background-color: rgba(255, 193, 7, 0.188235);
+  color: #fd7e14;
 }
 
-#chartsTitle{
-    font-size: 24px;
-    font-weight: 700;
-    text-align: center;
-    padding: 2rem 0rem 1rem 0rem;
-    color: #6c757d;
+#chartsTitle {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  padding: 2rem 0rem 1rem 0rem;
+  color: #6c757d;
+}
+
+/* For navbar */
+.navbar-brand {
+  text-transform: uppercase;
+}
+
+.navbar .nav {
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 1.2rem;
+}
+
+.navbar-inverse {
+  background-color: #201aa2cc;
+}
+
+/* .navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+  background-color: #fad851;
+} */
+
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:hover,
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:hover,
+.navbar-inverse .navbar-nav > .open > a:focus {
+  background-color: #ffcc00;
+}
+
+.navbar-inverse {
+  background-image: none;
+}
+
+.navbar-inverse {
+  border-color: #003300;
+}
+
+.navbar-inverse .navbar-brand {
+  color: #ffffff;
+}
+
+.navbar-inverse .navbar-brand:hover {
+  color: #ffcc00;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+  color: #ffffff;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+  color: #ffcc00;
+}
+
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:hover,
+.navbar-inverse .navbar-nav > .open > a:focus {
+  color: #ffcc00;
+}
+
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus {
+  color: #ffcc00;
 }
