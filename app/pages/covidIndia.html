@@ -4,8 +4,8 @@
 </div>
 
 <!-- Total Country Data-->
-<div class="row">
-  <div id="countryData" ng-repeat="data in countryData" class="col-sm-3 col-md-3" ng-class="data.CSS">
+<div class="row" ng-mouseover="updateChartToHoveredState('INDIA')">
+  <div id="countryData" ng-repeat="data in countryData" class="col" ng-class="data.CSS">
 
     <h5>{{ data.CASE_TYPE }}</h5>
     <h3 style="font-weight: bold">{{ data.CASE_COUNT }}</h3>
@@ -14,7 +14,7 @@
 </div>
 
 <!-- StateWise Data -->
-<div class="row">
+<div class="row" style="padding: 2rem 0rem">
 
   <!-- Left Panel -->
   <div class="col-sm-12 col-md-6">
@@ -30,7 +30,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="state in stateData">
+      <tr ng-repeat="state in stateData" ng-mouseover="updateChartToHoveredState(state.STATE_CODE)">
         <th scope="row">{{ state.NAME }}</th>
         <td style="color: #ff073a"> {{ state.CONFIRMED }} </td>
         <td style="color: #007bff"> {{ state.ACTIVE }} </td>
@@ -48,7 +48,7 @@
   <div class="col-sm-12 col-md-6">
 
     <div id="chartsTitle">
-      Visualisation
+      {{currentStateShown}} Visualisation
     </div>
 
     <div class="row" style="text-align: center; padding: 0rem 0rem 1rem 0rem;">

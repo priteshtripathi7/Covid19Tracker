@@ -47,6 +47,11 @@
     color: #6c757d;
 }
 
+.testedData{
+    background-color: rgba(255,193,7,.188235);
+    color: #fd7e14;
+}
+
 #chartsTitle{
     font-size: 24px;
     font-weight: 700;
