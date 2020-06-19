@@ -1,4 +1,5 @@
 import * as CommonFunc from './modules/commonFunc.js';
+import * as ConfigDetails from '../config.js';
 
 const app = angular.module("app", ["ngRoute"]);
 
@@ -8,16 +9,22 @@ app.config(function ($routeProvider, $locationProvider) {
 
         .when("/", {
             templateUrl: "pages/covidIndia.html",
-            controller: "tableDataCtrl",
+            controller: "indiaPageCtrl",
         })
 
         .when("/world", {
             templateUrl: "pages/covidWorld.html",
             controller: "worldTableDataCtrl",
-        });
+        })
+
+        .when("/assessYourself", {
+            templateUrl: "pages/assessYourself.html",
+            controller: "assessYourselfPageCtrl"
+        })
+
 });
 
-app.controller('tableDataCtrl', function($scope, $http) {
+app.controller('indiaPageCtrl', function($scope, $http) {
 
     $scope.stateData =  [];
     $scope.countryData = [];
@@ -449,6 +456,144 @@ app.controller('tableDataCtrl', function($scope, $http) {
     }
 });
 
+app.controller('assessYourselfPageCtrl', function($scope, $http) {
+
+    $scope.request = {
+        method: 'POST',
+        url: 'https://api.infermedica.com/covid19/diagnosis',
+        headers: {
+            'App-Id' : ConfigDetails.configAPI.ID,
+            'App-Key': ConfigDetails.configAPI.KEY,
+            'Content-Type' : 'application/json'
+        },
+        data: {
+            'sex': undefined,
+            'age': undefined,
+            'evidence': []
+        }
+    }
+
+    $scope.questionCount = 0;
+    $scope.answeredQuestion = [];
+
+    $scope.setRequestGender = function(gender) {
+        if($scope.request.data['sex'] === undefined) {
+            $scope.request.data['sex'] = gender;
+            document.querySelector('#ageQues').style.display = 'block';
+            CommonFunc.scrollIntoNewElementView();
+        }
+    }
+
+    $scope.setRequestAge = function() {
+        if($scope.request.data['age'] === undefined){
+            const ageInput = parseInt(document.querySelector('#ageInput').value);
+
+            if(document.querySelector('#ageInput').value === ''){
+                alert('Please enter you age to proceed!!');
+                document.querySelector('#ageInput').focus();
+                return;
+            }
+            else if(ageInput < 0){
+                alert('Age cannot be negative!!');
+                document.querySelector('#ageInput').focus();
+                return;
+            }
+
+            $scope.request.data['age'] = ageInput;
+            $scope.requestAPI();
+        }
+    }
+
+    $scope.singleAnswer = function(event){
+        const parentDiv = event.target.parentElement;
+
+        if($scope.answeredQuestion.includes(parentDiv.id))
+            return;
+
+        const inputElement = event.target;
+        $scope.request.data['evidence'].push({
+            "id": inputElement.getAttribute('question-id'),
+            "choice_id": inputElement.getAttribute('name')
+        });
+        $scope.answeredQuestion.push(parentDiv.id);
+        $scope.requestAPI();
+    };
+
+    $scope.groupSingleAnswer = function(event){
+        const parentDiv = event.target.parentElement;
+
+        if($scope.answeredQuestion.includes(parentDiv.id))
+            return;
+
+        const inputElement = event.target;
+        $scope.request.data['evidence'].push({
+            "id": inputElement.getAttribute('question-id'),
+            "choice_id": "present"
+        });
+        $scope.answeredQuestion.push(parentDiv.id);
+        $scope.requestAPI();
+    }
+
+    $scope.groupMultipleAnswer = function(event){
+        const parentDiv = event.target.parentElement;
+
+        if($scope.answeredQuestion.includes(parentDiv.id))
+            return;
+
+        const checkBoxElements = parentDiv.querySelectorAll('input[type="checkbox"]');
+        for(let iterator = 0; iterator < checkBoxElements.length; iterator++){
+
+            const checkBoxElement = checkBoxElements[iterator];
+            if(checkBoxElement.checked){
+                $scope.request.data['evidence'].push({
+                    "id": checkBoxElement.id,
+                    "choice_id": "present"
+                });
+            }else {
+                $scope.request.data['evidence'].push({
+                    "id": checkBoxElement.id,
+                    "choice_id": "absent"
+                });
+            }
+        }
+        $scope.answeredQuestion.push(parentDiv.id);
+        $scope.requestAPI();
+    }
+
+    $scope.endAssessment = function(result){
+        let finalAPIRequest = $scope.request;
+        finalAPIRequest.url = "https://api.infermedica.com/covid19/triage";
+
+        $http(finalAPIRequest).then(
+            function(response){
+                CommonFunc.printFinalReport(response.data);
+                CommonFunc.scrollIntoNewElementView();
+            },
+            function(error, status){
+                console.log(error);
+                console.log(status);
+            }
+        )
+    }
+
+    $scope.requestAPI = function(){
+        $http($scope.request).then(
+            function(result){
+                if(result.data.should_stop) {
+                    $scope.endAssessment(result);
+                }else {
+                    CommonFunc.addQuestionToDOM(result.data.question, $scope.questionCount++);
+                    CommonFunc.scrollIntoNewElementView();
+                }
+            },
+            function(error, status){
+                console.log(error);
+                console.log(status);
+            }
+        )
+    }
+
+});
 
 app.controller("worldTableDataCtrl", function ($scope, $http) {
     $http.get("https://api.covid19api.com/summary").then(

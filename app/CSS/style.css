@@ -9,7 +9,7 @@
 
 #pageTitle {
     font-weight: 900;
-    font-size: 32px;
+    font-size: 40px;
     color: #6c757d;
     padding: .5rem 0rem 1rem 0rem;
     text-align: center;
@@ -58,4 +58,55 @@
     text-align: center;
     padding: 2rem 0rem 1rem 0rem;
     color: #6c757d;
+}
+
+.chatMssg{
+    background-color: rgba(255,193,7,.188235);
+    color: #fd7e14;
+    padding: 1rem;
+    border-radius: 2rem 2rem 2rem 0rem;
+}
+
+.option{
+    text-align: center;
+    background-color: rgba(255,193,7,.188235);
+    color: #fd7e14;
+    margin: 0rem 1rem 1rem 1rem;
+}
+
+.finalReportDanger{
+    margin: 3rem;
+    padding: 2rem;
+    background-color: rgba(255,7,58,.12549);
+    border-radius: 2rem;
+}
+
+.finalReportMild{
+    margin: 3rem;
+    padding: 2rem;
+    background-color: rgba(0,123,255,.0627451);
+    border-radius: 2rem;
+}
+
+.finalReportSafe{
+    margin: 3rem;
+    padding: 2rem;
+    background-color: rgba(40,167,69,.12549);
+    border-radius: 2rem;
+}
+
+.reportHeadingDanger{
+    color: #ff073a;
+}
+
+.reportHeadingMild{
+    color: #007bff;
+}
+
+.reportHeadingSafe{
+    color: #28a745;
+}
+
+.reportSummary{
+    font-size: 20px;
 }
