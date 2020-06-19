@@ -1,0 +1,32 @@
+<!-- PageTitle -->
+<div id="pageTitle">
+    Assess YourSelf
+</div>
+
+<!-- ChatBox -->
+<div style="padding: 2rem" id="chatBox">
+    <div class="col-sm-6" >
+        <p class="chatMssg">Hi! Hope So you are doing fine during this situation. This is a quick check to
+            help you assess your condition during COVID19..</p>
+    </div>
+    <div class="col-sm-6">
+        <div>
+            <p class="chatMssg">What is Your Gender?</p>
+        </div>
+        <div>
+            <input type="button" ng-click="setRequestGender('male')" class="btn option" value="Male">
+            <input type="button" ng-click="setRequestGender('female')" class="btn option" value="Female">
+        </div>
+    </div>
+
+    <div style="display: none;" id="ageQues" class="col-sm-6">
+        <div>
+            <p class="chatMssg">What is Your Age?</p>
+        </div>
+        <div>
+            <input type="number" id="ageInput" style="background-color: white; border: 1px solid black" class="btn option" min="0" placeholder="Age">
+            <input type="button" ng-click="setRequestAge()" class="btn option" value="Next">
+        </div>
+    </div>
+</div>
+
