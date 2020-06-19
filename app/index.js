@@ -598,6 +598,32 @@ app.controller('assessYourselfPageCtrl', function($scope, $http) {
 app.controller("worldTableDataCtrl", function ($scope, $http) {
     $http.get("https://api.covid19api.com/summary").then(
         function (result) {
+            $scope.worldData = [];
+
+            //World Data
+            $scope.worldData.push({
+                CASE_TYPE: "Confirmed",
+                CASE_COUNT: CommonFunc.formatNumber(result.data.Global.TotalConfirmed),
+                CSS: "confirmedData",
+            });
+            $scope.worldData.push({
+                CASE_TYPE: "Active",
+                CASE_COUNT: CommonFunc.formatNumber(
+                    result.data.Global.TotalConfirmed -
+                    (result.data.Global.TotalDeaths + result.data.Global.TotalRecovered)
+                ),
+                CSS: "activeData",
+            });
+            $scope.worldData.push({
+                CASE_TYPE: "Recovered",
+                CASE_COUNT: CommonFunc.formatNumber(result.data.Global.TotalRecovered),
+                CSS: "recoveredData",
+            });
+            $scope.worldData.push({
+                CASE_TYPE: "Deceased",
+                CASE_COUNT: CommonFunc.formatNumber(result.data.Global.TotalDeaths),
+                CSS: "deceasedData",
+            });
             //console.log(result);
             $scope.countryData = result.data.Countries.map((countryObj) => {
                 return {
