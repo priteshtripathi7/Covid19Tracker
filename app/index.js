@@ -1,5 +1,5 @@
 import * as CommonFunc from './modules/commonFunc.js';
-import * as ConfigDetails from '../config.js';
+import * as ConfigDetails from './config.js';
 
 const app = angular.module("app", ["ngRoute"]);
 
