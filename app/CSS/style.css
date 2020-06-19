@@ -11,7 +11,7 @@
     font-weight: 900;
     font-size: 40px;
     color: #6c757d;
-    padding: .5rem 0rem 1rem 0rem;
+    padding: 2rem 0rem 1rem 0rem;
     text-align: center;
 }
 
@@ -130,7 +130,7 @@
 }
 
 .navbar-inverse {
-  background-color: #201aa2cc;
+  background-color: rgba(32,26,162,.666);
 }
 
 /* .navbar-inverse .navbar-nav > .active > a:hover,
