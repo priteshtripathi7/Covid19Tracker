@@ -20,26 +20,27 @@
   <div class="col-sm-12 col-md-6">
     <table class="table table-hover table-sm" id="indiaDataTable" ng-cloak>
       <thead>
-      <tr>
-        <th scope="col">State/UT</th>
-        <th scope="col">C</th>
-        <th scope="col">A</th>
-        <th scope="col">R</th>
-        <th scope="col">D</th>
-        <th scope="col"></th>
-      </tr>
+        <tr>
+          <th scope="col">State/UT</th>
+          <th scope="col">C</th>
+          <th scope="col">A</th>
+          <th scope="col">R</th>
+          <th scope="col">D</th>
+          <th scope="col"></th>
+        </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="state in stateData" ng-mouseover="updateChartToHoveredState(state.STATE_CODE)">
-        <th scope="row">{{ state.NAME }}</th>
-        <td style="color: #ff073a"> {{ state.CONFIRMED }} </td>
-        <td style="color: #007bff"> {{ state.ACTIVE }} </td>
-        <td style="color: #28a745"> {{ state.RECOVERED }} </td>
-        <td style="color: #6c757d"> {{ state.DEATHS }} </td>
-        <td>
-            <i class="fa fa-download" style="font-size: 14px" ng-click="generateStateReport(state.NAME)" aria-hidden="true"></i>
-        </td>
-      </tr>
+        <tr ng-repeat="state in stateData" ng-mouseover="updateChartToHoveredState(state.STATE_CODE)">
+          <th scope="row">{{ state.NAME }}</th>
+          <td style="color: #ff073a"> {{ state.CONFIRMED }} </td>
+          <td style="color: #007bff"> {{ state.ACTIVE }} </td>
+          <td style="color: #28a745"> {{ state.RECOVERED }} </td>
+          <td style="color: #6c757d"> {{ state.DEATHS }} </td>
+          <td>
+            <i class="fa fa-download" style="font-size: 14px" ng-click="generateStateReport(state.NAME)"
+              aria-hidden="true"></i>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -53,10 +54,12 @@
 
     <div class="row" style="text-align: center; padding: 0rem 0rem 1rem 0rem;">
       <div class="col-sm-6">
-        <button ng-click="changeChartDisplayToCumulative()" type="button" class="btn btn-outline-secondary btn-sm">Cumulative</button>
+        <button ng-click="changeChartDisplayToCumulative()" type="button"
+          class="btn btn-outline-secondary btn-sm">Cumulative</button>
       </div>
       <div class="col-sm-6">
-        <button ng-click="changeChartDisplayToDaily()" type="button" class="btn btn-outline-secondary btn-sm">Daily</button>
+        <button ng-click="changeChartDisplayToDaily()" type="button"
+          class="btn btn-outline-secondary btn-sm">Daily</button>
       </div>
     </div>
 

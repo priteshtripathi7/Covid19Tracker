@@ -5,30 +5,25 @@
 
 <!-- Total World Data -->
 <div class="row">
-  <div
-    id="countryData"
-    ng-repeat="data in worldData"
-    class="col"
-    ng-class="data.CSS"
-  >
+  <div id="countryData" ng-repeat="data in worldData" class="col" ng-class="data.CSS">
     <h5>{{ data.CASE_TYPE }}</h5>
     <h3 style="font-weight: bold;">{{ data.CASE_COUNT }}</h3>
   </div>
 </div>
 
 <!-- Countrywise data -->
-<table class="table table-hover table-sm" id="indiaDataTable" ng-cloak>
+<table class="table table2 table-hover table-sm" id="indiaDataTable" ng-cloak>
   <thead>
     <tr>
       <th scope="col">Country</th>
-      <th scope="col">Confirmed</th>
-      <th scope="col">Active</th>
-      <th scope="col">Recovered</th>
-      <th scope="col">Deaths</th>
+      <th ng-click='sortColumn("CONFIRMED")' ng-class='sortClass("CONFIRMED")' scope="col">Confirmed</th>
+      <th ng-click='sortColumn("ACTIVE")' ng-class='sortClass("ACTIVE")' scope="col">Active</th>
+      <th ng-click='sortColumn("RECOVERED")' ng-class='sortClass("RECOVERED")' scope="col">Recovered</th>
+      <th ng-click='sortColumn("DEATHS")' ng-class='sortClass("DEATHS")' scope="col">Deaths</th>
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="country in countryData">
+    <tr ng-repeat="country in countryData|orderBy:column:reverse">
       <th scope="row">{{ country.NAME }}</th>
       <td style="color: #ff073a;">{{ country.CONFIRMED }}</td>
       <td style="color: #007bff;">{{ country.ACTIVE }}</td>

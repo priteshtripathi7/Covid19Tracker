@@ -24,9 +24,9 @@ app.config(function ($routeProvider, $locationProvider) {
 
 });
 
-app.controller('indiaPageCtrl', function($scope, $http) {
+app.controller('indiaPageCtrl', function ($scope, $http) {
 
-    $scope.stateData =  [];
+    $scope.stateData = [];
     $scope.countryData = [];
     $scope.chartData = {};
     $scope.stateDailyData = {};
@@ -40,34 +40,34 @@ app.controller('indiaPageCtrl', function($scope, $http) {
 
     $http.get('https://api.covid19india.org/data.json')
         .then(
-            function(result){
+            function (result) {
 
                 const states = result.data.statewise;
                 // India Country Data
                 $scope.countryData.push(
                     {
-                        CASE_TYPE : "Confirmed",
+                        CASE_TYPE: "Confirmed",
                         CASE_COUNT: CommonFunc.formatNumber(states[0].confirmed),
                         CSS: "confirmedData"
                     }
                 )
                 $scope.countryData.push(
                     {
-                        CASE_TYPE : "Active",
+                        CASE_TYPE: "Active",
                         CASE_COUNT: CommonFunc.formatNumber(states[0].active),
                         CSS: "activeData"
                     }
                 )
                 $scope.countryData.push(
                     {
-                        CASE_TYPE : "Recovered",
+                        CASE_TYPE: "Recovered",
                         CASE_COUNT: CommonFunc.formatNumber(states[0].recovered),
                         CSS: "recoveredData"
                     }
                 )
                 $scope.countryData.push(
                     {
-                        CASE_TYPE : "Deceased",
+                        CASE_TYPE: "Deceased",
                         CASE_COUNT: CommonFunc.formatNumber(states[0].deaths),
                         CSS: "deceasedData"
                     }
@@ -82,7 +82,7 @@ app.controller('indiaPageCtrl', function($scope, $http) {
                 )
 
                 // StateWise Data
-                for(let iterator=1; iterator < states.length; iterator++) {
+                for (let iterator = 1; iterator < states.length; iterator++) {
 
                     const stateObj = states[iterator];
                     $scope.stateData.push({
@@ -111,7 +111,7 @@ app.controller('indiaPageCtrl', function($scope, $http) {
 
                 // Line Graph Data
                 const dailyData = result.data.cases_time_series;
-                const indiaData =  {
+                const indiaData = {
                     LABEL: [],
                     CONFIRMED: [],
                     ACTIVE: [],
@@ -122,7 +122,7 @@ app.controller('indiaPageCtrl', function($scope, $http) {
                     TOTAL_RECOVERED: [],
                     TOTAL_DECEASED: []
                 };
-                for(let iterator = dailyData.length - 30; iterator < dailyData.length; iterator++){
+                for (let iterator = dailyData.length - 30; iterator < dailyData.length; iterator++) {
                     const currentDayData = dailyData[iterator];
                     indiaData.LABEL.push(currentDayData.date);
 
@@ -143,7 +143,7 @@ app.controller('indiaPageCtrl', function($scope, $http) {
                 $scope.stateDailyData.INDIA = indiaData;
                 $scope.changeChartDisplayToCumulative();
             },
-            function(error, status){
+            function (error, status) {
                 console.log(error);
                 console.log(status);
             }
@@ -151,29 +151,29 @@ app.controller('indiaPageCtrl', function($scope, $http) {
 
     $http.get('https://api.covid19india.org/states_daily.json')
         .then(
-            function(result){
+            function (result) {
                 const dailyData = result.data.states_daily;
 
-                for(let iterator = dailyData.length - 90; iterator < dailyData.length; iterator += 3){
+                for (let iterator = dailyData.length - 90; iterator < dailyData.length; iterator += 3) {
 
                     // For Confirmed
-                    for(const state in dailyData[iterator]){
-                        const stateCode =  state.toUpperCase();
-                        if($scope.stateDailyData[stateCode] !== undefined){
+                    for (const state in dailyData[iterator]) {
+                        const stateCode = state.toUpperCase();
+                        if ($scope.stateDailyData[stateCode] !== undefined) {
                             $scope.stateDailyData[stateCode].LABEL.push(dailyData[iterator].date);
                             $scope.stateDailyData[stateCode].CONFIRMED.push(parseInt(dailyData[iterator][state]));
                         }
                     }
 
                     // For Recovered
-                    for(const state in dailyData[iterator + 1]){
-                        const stateCode =  state.toUpperCase();
-                        if($scope.stateDailyData[stateCode] !== undefined)
+                    for (const state in dailyData[iterator + 1]) {
+                        const stateCode = state.toUpperCase();
+                        if ($scope.stateDailyData[stateCode] !== undefined)
                             $scope.stateDailyData[stateCode].RECOVERED.push(parseInt(dailyData[iterator + 1][state]));
                     }
 
                     // For Deceased
-                    for(const state in dailyData[iterator + 2]) {
+                    for (const state in dailyData[iterator + 2]) {
                         const stateCode = state.toUpperCase();
                         if ($scope.stateDailyData[stateCode] !== undefined) {
                             $scope.stateDailyData[stateCode].DECEASED.push(parseInt(dailyData[iterator + 2][state]));
@@ -182,12 +182,12 @@ app.controller('indiaPageCtrl', function($scope, $http) {
                 }
 
                 // Formatting other data
-                for(let state in $scope.stateDailyData){
-                    if(state !== 'INDIA'){
+                for (let state in $scope.stateDailyData) {
+                    if (state !== 'INDIA') {
 
                         let totalConfirmed = 0, totalActive = 0, totalRecovered = 0, totalDeceased = 0;
 
-                        for(let iterator = 0; iterator < $scope.stateDailyData[state].CONFIRMED.length; iterator++){
+                        for (let iterator = 0; iterator < $scope.stateDailyData[state].CONFIRMED.length; iterator++) {
 
                             const currentState = $scope.stateDailyData[state];
                             currentState.ACTIVE.push(currentState.CONFIRMED[iterator] - currentState.RECOVERED[iterator] - currentState.DECEASED[iterator]);
@@ -207,19 +207,19 @@ app.controller('indiaPageCtrl', function($scope, $http) {
                     }
                 }
             },
-            function(error, status){
+            function (error, status) {
                 console.log(error);
                 console.log(status);
             }
         )
 
-    $scope.updateChartToHoveredState = function(stateCode = 'INDIA'){
+    $scope.updateChartToHoveredState = function (stateCode = 'INDIA') {
         $scope.chartData = $scope.stateDailyData[stateCode];
 
-        if($scope.currentStateShown === $scope.stateCodeMap[stateCode])
+        if ($scope.currentStateShown === $scope.stateCodeMap[stateCode])
             return;
 
-        if($scope.currentChartType === 'line')
+        if ($scope.currentChartType === 'line')
             $scope.changeChartDisplayToCumulative();
         else
             $scope.changeChartDisplayToDaily();
@@ -227,17 +227,17 @@ app.controller('indiaPageCtrl', function($scope, $http) {
         $scope.currentStateShown = $scope.stateCodeMap[stateCode];
     };
 
-    $scope.changeChartDisplayToCumulative = function() {
+    $scope.changeChartDisplayToCumulative = function () {
 
         $scope.currentChartType = 'line';
 
-        if(confirmedChart !== undefined)
+        if (confirmedChart !== undefined)
             confirmedChart.destroy();
-        if(activeChart !== undefined)
+        if (activeChart !== undefined)
             activeChart.destroy();
-        if(deceasedChart !== undefined)
+        if (deceasedChart !== undefined)
             deceasedChart.destroy();
-        if(recoveredChart !== undefined)
+        if (recoveredChart !== undefined)
             recoveredChart.destroy();
 
         const ctxConfirmed = document.getElementById('confirmedChart').getContext('2d');
@@ -301,17 +301,17 @@ app.controller('indiaPageCtrl', function($scope, $http) {
         });
     }
 
-    $scope.changeChartDisplayToDaily = function() {
+    $scope.changeChartDisplayToDaily = function () {
 
         $scope.currentChartType = 'bar';
 
-        if(confirmedChart !== undefined)
+        if (confirmedChart !== undefined)
             confirmedChart.destroy();
-        if(activeChart !== undefined)
+        if (activeChart !== undefined)
             activeChart.destroy();
-        if(deceasedChart !== undefined)
+        if (deceasedChart !== undefined)
             deceasedChart.destroy();
-        if(recoveredChart !== undefined)
+        if (recoveredChart !== undefined)
             recoveredChart.destroy();
 
         const ctxConfirmed = document.getElementById('confirmedChart').getContext('2d');
@@ -326,7 +326,7 @@ app.controller('indiaPageCtrl', function($scope, $http) {
                     data: $scope.chartData.CONFIRMED
                 }]
             },
-            options : {
+            options: {
                 scales: {
                     xAxes: [{
                         barPercentage: 0.4
@@ -347,7 +347,7 @@ app.controller('indiaPageCtrl', function($scope, $http) {
                     data: $scope.chartData.ACTIVE
                 }]
             },
-            options : {
+            options: {
                 scales: {
                     xAxes: [{
                         barPercentage: 0.4
@@ -368,7 +368,7 @@ app.controller('indiaPageCtrl', function($scope, $http) {
                     data: $scope.chartData.RECOVERED
                 }]
             },
-            options : {
+            options: {
                 scales: {
                     xAxes: [{
                         barPercentage: 0.4
@@ -389,7 +389,7 @@ app.controller('indiaPageCtrl', function($scope, $http) {
                     data: $scope.chartData.DECEASED
                 }]
             },
-            options : {
+            options: {
                 scales: {
                     xAxes: [{
                         barPercentage: 0.4
@@ -399,37 +399,37 @@ app.controller('indiaPageCtrl', function($scope, $http) {
         });
     }
 
-    $scope.generateStateReport = function(stateName) {
+    $scope.generateStateReport = function (stateName) {
 
         $http.get('https://api.covid19india.org/state_district_wise.json\n')
             .then(
-                function(result){
+                function (result) {
                     const stateData = result.data[stateName].districtData;
                     const fileName = `${stateName.split(' ').join('_')}_report.txt`;
 
                     let data = `DISTRICT WISE CASE REPORT OF ${stateName.toUpperCase()}\n\n`;
-                    for(const district in stateData){
+                    for (const district in stateData) {
                         const notes = stateData[district].notes === '' ? 'No' : stateData[district].notes;
 
                         data = data + `DISTRICT NAME : ${district}\n`;
-                        data = data + `TOTAL CONFIRMED CASES : ${ CommonFunc.formatNumber(stateData[district].confirmed) }\n`;
-                        data = data + `TOTAL ACTIVE CASES : ${ CommonFunc.formatNumber(stateData[district].active) }\n`;
-                        data = data + `TOTAL RECOVERED CASES : ${ CommonFunc.formatNumber(stateData[district].recovered) }\n`;
-                        data = data + `TOTAL DECEASED CASES : ${ CommonFunc.formatNumber(stateData[district].deceased) }\n`;
+                        data = data + `TOTAL CONFIRMED CASES : ${CommonFunc.formatNumber(stateData[district].confirmed)}\n`;
+                        data = data + `TOTAL ACTIVE CASES : ${CommonFunc.formatNumber(stateData[district].active)}\n`;
+                        data = data + `TOTAL RECOVERED CASES : ${CommonFunc.formatNumber(stateData[district].recovered)}\n`;
+                        data = data + `TOTAL DECEASED CASES : ${CommonFunc.formatNumber(stateData[district].deceased)}\n`;
                         data = data + `ANY OTHER NOTES: ${notes}\n\n`;
                     }
 
                     $http.get('https://api.covid19india.org/resources/resources.json')
                         .then(
-                            function(result){
+                            function (result) {
 
                                 const resources = result.data.resources;
                                 data = data + `OTHER USEFUL RESOURCES\n\n`;
 
-                                for(let iterator = 0; iterator < resources.length; iterator++){
+                                for (let iterator = 0; iterator < resources.length; iterator++) {
 
                                     const resource = resources[iterator];
-                                    if(resource.state === stateName){
+                                    if (resource.state === stateName) {
 
                                         data = data + `CATEGORY OF RESOURCE(TYPE): ${resource.category}\n`;
                                         data = data + `CITY: ${resource.city}\n`;
@@ -442,13 +442,13 @@ app.controller('indiaPageCtrl', function($scope, $http) {
                                 CommonFunc.generateDownload(fileName, data);
 
                             },
-                            function(error, status){
+                            function (error, status) {
                                 console.log(error);
                                 console.log(status);
                             }
                         );
                 },
-                function(error, status){
+                function (error, status) {
                     console.log(error);
                     console.log(status);
                 }
@@ -456,15 +456,15 @@ app.controller('indiaPageCtrl', function($scope, $http) {
     }
 });
 
-app.controller('assessYourselfPageCtrl', function($scope, $http) {
+app.controller('assessYourselfPageCtrl', function ($scope, $http) {
 
     $scope.request = {
         method: 'POST',
         url: 'https://api.infermedica.com/covid19/diagnosis',
         headers: {
-            'App-Id' : ConfigDetails.configAPI.ID,
+            'App-Id': ConfigDetails.configAPI.ID,
             'App-Key': ConfigDetails.configAPI.KEY,
-            'Content-Type' : 'application/json'
+            'Content-Type': 'application/json'
         },
         data: {
             'sex': undefined,
@@ -476,24 +476,24 @@ app.controller('assessYourselfPageCtrl', function($scope, $http) {
     $scope.questionCount = 0;
     $scope.answeredQuestion = [];
 
-    $scope.setRequestGender = function(gender) {
-        if($scope.request.data['sex'] === undefined) {
+    $scope.setRequestGender = function (gender) {
+        if ($scope.request.data['sex'] === undefined) {
             $scope.request.data['sex'] = gender;
             document.querySelector('#ageQues').style.display = 'block';
             CommonFunc.scrollIntoNewElementView();
         }
     }
 
-    $scope.setRequestAge = function() {
-        if($scope.request.data['age'] === undefined){
+    $scope.setRequestAge = function () {
+        if ($scope.request.data['age'] === undefined) {
             const ageInput = parseInt(document.querySelector('#ageInput').value);
 
-            if(document.querySelector('#ageInput').value === ''){
+            if (document.querySelector('#ageInput').value === '') {
                 alert('Please enter you age to proceed!!');
                 document.querySelector('#ageInput').focus();
                 return;
             }
-            else if(ageInput < 0){
+            else if (ageInput < 0) {
                 alert('Age cannot be negative!!');
                 document.querySelector('#ageInput').focus();
                 return;
@@ -504,10 +504,10 @@ app.controller('assessYourselfPageCtrl', function($scope, $http) {
         }
     }
 
-    $scope.singleAnswer = function(event){
+    $scope.singleAnswer = function (event) {
         const parentDiv = event.target.parentElement;
 
-        if($scope.answeredQuestion.includes(parentDiv.id))
+        if ($scope.answeredQuestion.includes(parentDiv.id))
             return;
 
         const inputElement = event.target;
@@ -519,10 +519,10 @@ app.controller('assessYourselfPageCtrl', function($scope, $http) {
         $scope.requestAPI();
     };
 
-    $scope.groupSingleAnswer = function(event){
+    $scope.groupSingleAnswer = function (event) {
         const parentDiv = event.target.parentElement;
 
-        if($scope.answeredQuestion.includes(parentDiv.id))
+        if ($scope.answeredQuestion.includes(parentDiv.id))
             return;
 
         const inputElement = event.target;
@@ -534,22 +534,22 @@ app.controller('assessYourselfPageCtrl', function($scope, $http) {
         $scope.requestAPI();
     }
 
-    $scope.groupMultipleAnswer = function(event){
+    $scope.groupMultipleAnswer = function (event) {
         const parentDiv = event.target.parentElement;
 
-        if($scope.answeredQuestion.includes(parentDiv.id))
+        if ($scope.answeredQuestion.includes(parentDiv.id))
             return;
 
         const checkBoxElements = parentDiv.querySelectorAll('input[type="checkbox"]');
-        for(let iterator = 0; iterator < checkBoxElements.length; iterator++){
+        for (let iterator = 0; iterator < checkBoxElements.length; iterator++) {
 
             const checkBoxElement = checkBoxElements[iterator];
-            if(checkBoxElement.checked){
+            if (checkBoxElement.checked) {
                 $scope.request.data['evidence'].push({
                     "id": checkBoxElement.id,
                     "choice_id": "present"
                 });
-            }else {
+            } else {
                 $scope.request.data['evidence'].push({
                     "id": checkBoxElement.id,
                     "choice_id": "absent"
@@ -560,33 +560,33 @@ app.controller('assessYourselfPageCtrl', function($scope, $http) {
         $scope.requestAPI();
     }
 
-    $scope.endAssessment = function(result){
+    $scope.endAssessment = function (result) {
         let finalAPIRequest = $scope.request;
         finalAPIRequest.url = "https://api.infermedica.com/covid19/triage";
 
         $http(finalAPIRequest).then(
-            function(response){
+            function (response) {
                 CommonFunc.printFinalReport(response.data);
                 CommonFunc.scrollIntoNewElementView();
             },
-            function(error, status){
+            function (error, status) {
                 console.log(error);
                 console.log(status);
             }
         )
     }
 
-    $scope.requestAPI = function(){
+    $scope.requestAPI = function () {
         $http($scope.request).then(
-            function(result){
-                if(result.data.should_stop) {
+            function (result) {
+                if (result.data.should_stop) {
                     $scope.endAssessment(result);
-                }else {
+                } else {
                     CommonFunc.addQuestionToDOM(result.data.question, $scope.questionCount++);
                     CommonFunc.scrollIntoNewElementView();
                 }
             },
-            function(error, status){
+            function (error, status) {
                 console.log(error);
                 console.log(status);
             }
@@ -596,6 +596,8 @@ app.controller('assessYourselfPageCtrl', function($scope, $http) {
 });
 
 app.controller("worldTableDataCtrl", function ($scope, $http) {
+    $scope.countryData = [];
+
     $http.get("https://api.covid19api.com/summary").then(
         function (result) {
             $scope.worldData = [];
@@ -625,8 +627,10 @@ app.controller("worldTableDataCtrl", function ($scope, $http) {
                 CSS: "deceasedData",
             });
             //console.log(result);
-            $scope.countryData = result.data.Countries.map((countryObj) => {
-                return {
+            const countries = result.data.Countries;
+            for (let iterator = 1; iterator < countries.length; iterator++) {
+                const countryObj = countries[iterator];
+                $scope.countryData.push({
                     NAME: countryObj.Country,
                     CONFIRMED: countryObj.TotalConfirmed,
                     ACTIVE:
@@ -634,12 +638,43 @@ app.controller("worldTableDataCtrl", function ($scope, $http) {
                         (countryObj.TotalDeaths + countryObj.TotalRecovered),
                     DEATHS: countryObj.TotalDeaths,
                     RECOVERED: countryObj.TotalRecovered,
-                };
-            });
+                })
+            }
         },
         function (error, status) {
             console.log(error);
             console.log(status);
         }
     );
+
+    // column to sort
+    $scope.column = "CONFIRMED";
+
+    // sort ordering (Ascending or Descending). Set true for desending
+    $scope.reverse = true;
+
+    // called on header click
+    $scope.sortColumn = function (col) {
+        $scope.column = col;
+        if ($scope.reverse) {
+            $scope.reverse = false;
+            $scope.reverseclass = "arrow-up";
+        } else {
+            $scope.reverse = true;
+            $scope.reverseclass = "arrow-down";
+        }
+    };
+
+    // remove and change class
+    $scope.sortClass = function (col) {
+        if ($scope.column == col) {
+            if ($scope.reverse) {
+                return "arrow-down";
+            } else {
+                return "arrow-up";
+            }
+        } else {
+            return "";
+        }
+    };
 });
