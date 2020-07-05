@@ -8,6 +8,10 @@ app.config(function ($routeProvider, $locationProvider) {
     $routeProvider
 
         .when("/", {
+            templateUrl: "pages/homepage.html",
+            controller: "homePageCtrl",
+        })
+        .when("/india", {
             templateUrl: "pages/covidIndia.html",
             controller: "indiaPageCtrl",
         })
