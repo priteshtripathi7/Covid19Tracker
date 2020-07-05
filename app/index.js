@@ -691,6 +691,7 @@ app.controller("worldTableDataCtrl", function ($scope, $http) {
 app.controller('knowMorePageCtrl', function($scope, $http){
 
     $scope.dataList = '';
+    $scope.isQueryProcessing = false;
     $http.get('https://api.covid19india.org/state_district_wise.json').then(
         function(result){
             for(const state in result.data) {
@@ -710,7 +711,15 @@ app.controller('knowMorePageCtrl', function($scope, $http){
     );
 
     $scope.searchBar = function(){
+        if($scope.isQueryProcessing)
+            return;
+        
         const searchText = document.querySelector('#searchField').value;
+        
+        if(searchText === '')
+            return;
+            
+        $scope.isQueryProcessing = true;
         const caseData = [];
 
         $http.get('https://api.covid19india.org/state_district_wise.json').then(
@@ -791,5 +800,7 @@ app.controller('knowMorePageCtrl', function($scope, $http){
                 console.log(status);
             }
         );
+
+        $scope.isQueryProcessing = false;
     }
 })
