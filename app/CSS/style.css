@@ -15,6 +15,14 @@
   text-align: center;
 }
 
+#pageTitle2 {
+  font-weight: 900;
+  font-size: 30px;
+  color: #6c757d;
+  padding: 2rem 0rem 1rem 0rem;
+  text-align: center;
+}
+
 #indiaDataTable {
   font-size: 14px;
   font-weight: 600;
@@ -59,13 +67,6 @@
   color: #6c757d;
 }
 
-#chartsTitle {
-  font-size: 24px;
-  font-weight: 700;
-  text-align: center;
-  padding: 2rem 0rem 1rem 0rem;
-  color: #6c757d;
-}
 
 .chatMssg {
   background-color: rgba(255, 193, 7, 0.188235);
@@ -102,6 +103,13 @@
   border-radius: 2rem;
 }
 
+.noResult{
+  margin: 3rem;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.0627451);
+  border-radius: 2rem;
+}
+
 .reportHeadingDanger {
   color: #ff073a;
 }
@@ -114,8 +122,38 @@
   color: #28a745;
 }
 
+.noResultHeading{
+  color: #222222;
+}
+
 .reportSummary {
   font-size: 20px;
+}
+
+#searchField{
+  border: 2px solid #888888;
+  font-size: 1.5rem;
+}
+
+#searchBtn{
+  font-size: 1.8rem;
+  top: -10px !important;
+}
+
+#resourcesDiv{
+  padding: 2rem;
+}
+
+.resource{
+  padding: 5px 0px 0px 0px;
+}
+
+.resourceBar{
+  background-color: rgba(255, 193, 7, 0.188235);
+  color: #fd7e14;
+  margin: 1rem 0rem;
+  padding: 1rem;
+  border-radius: 23px;
 }
 
 /* For navbar */

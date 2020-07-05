@@ -26,6 +26,11 @@ app.config(function ($routeProvider, $locationProvider) {
             controller: "assessYourselfPageCtrl"
         })
 
+        .when("/knowMore", {
+            templateUrl: "pages/knowMore.html",
+            controller: "knowMorePageCtrl"
+        })
+
 });
 
 app.controller('indiaPageCtrl', function ($scope, $http) {
@@ -682,3 +687,109 @@ app.controller("worldTableDataCtrl", function ($scope, $http) {
         }
     };
 });
+
+app.controller('knowMorePageCtrl', function($scope, $http){
+
+    $scope.dataList = '';
+    $http.get('https://api.covid19india.org/state_district_wise.json').then(
+        function(result){
+            for(const state in result.data) {
+                const currentStateData = result.data[state].districtData;
+                for (const district in currentStateData) {
+                    let html =`<option value="${district}">`;
+                    $scope.dataList = $scope.dataList + html;
+                }
+            }
+            const dataList = document.querySelector('#cityList');
+            dataList.insertAdjacentHTML('beforeend', $scope.dataList);
+        },
+        function(error, status){
+            cosole.log(error);
+            console.log(status);
+        }
+    );
+
+    $scope.searchBar = function(){
+        const searchText = document.querySelector('#searchField').value;
+        const caseData = [];
+
+        $http.get('https://api.covid19india.org/state_district_wise.json').then(
+            function(result){
+                for(const state in result.data){
+                    const currentStateData = result.data[state].districtData;
+
+                    for(const district in currentStateData){
+                        if(district.toLowerCase() === searchText.toLowerCase()){
+
+                            caseData.push(
+                                {
+                                    CASE_TYPE: "Confirmed",
+                                    CASE_COUNT: CommonFunc.formatNumber(currentStateData[district].confirmed),
+                                    CSS: "confirmedData"
+                                }
+                            );
+                            caseData.push(
+                                {
+                                    CASE_TYPE: "Active",
+                                    CASE_COUNT: CommonFunc.formatNumber(currentStateData[district].active),
+                                    CSS: "activeData"
+                                }
+                            );
+                            caseData.push(
+                                {
+                                    CASE_TYPE: "Recovered",
+                                    CASE_COUNT: CommonFunc.formatNumber(currentStateData[district].recovered),
+                                    CSS: "recoveredData"
+                                }
+                            );
+                            caseData.push(
+                                {
+                                    CASE_TYPE: "Deceased",
+                                    CASE_COUNT: CommonFunc.formatNumber(currentStateData[district].deceased),
+                                    CSS: "deceasedData"
+                                }
+                            );
+                        }
+                    }
+                }
+
+                // Clearing div
+                document.querySelector('#cityData').innerHTML = '';
+
+                if(caseData.length === 0){
+                    CommonFunc.noResultFound(searchText);
+                    document.querySelector('#searchField').value = '';
+                    return;
+                }
+
+                $http.get('https://api.covid19india.org/resources/resources.json').then(
+                    function(result){
+                        const resources = result.data.resources;
+                        const requiredRes = [];
+                        for(let iterator = 0 ; iterator < resources.length; iterator++){
+                            if(resources[iterator].city.toLowerCase() === searchText.toLowerCase()){
+                                requiredRes.push({
+                                    CATEGORY: resources[iterator].category,
+                                    DESCRIPTION: resources[iterator].descriptionandorserviceprovided,
+                                    ORGANISATION: resources[iterator].nameoftheorganisation,
+                                    CONTACT: resources[iterator].contact,
+                                    PHONE: resources[iterator].phonenumber
+                                });
+                            }
+                        }
+                        CommonFunc.putCityData(searchText, caseData, requiredRes);
+                        document.querySelector('#searchField').value = '';
+                    },
+                    function(error, status){
+                        console.log(error);
+                        console.log(status);
+                    }
+                );
+            },
+            function(error, status){
+                console.log(error);
+                console.log(status);
+            }
+        );
+    }
+})

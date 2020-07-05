@@ -180,3 +180,79 @@ export function printFinalReport(data){
 
     chatBox.insertAdjacentHTML('beforeend', html);
 }
+
+/**
+ * Prints no result found in the city data
+ * @param searchText
+ */
+export function noResultFound(searchText){
+    const dataDiv = document.querySelector('#cityData');
+    const html = `
+        <div class="noResult">
+            <div class="noResultHeading">
+                <div style="font-size: 32px; text-align: center"> No Result Found for ${searchText}!</div>
+            </div>
+        </div>
+    `;
+
+    dataDiv.insertAdjacentHTML('beforeend', html);
+}
+
+/**
+ * Prints the city data in required div
+ * @param searchText
+ * @param data
+ * @param resources
+ */
+export function putCityData(searchText, data, resources){
+    const dataDiv = document.querySelector('#cityData');
+    let html = '';
+
+    html = html + `
+        <div id="pageTitle" style="font-size: 30px">
+            ${searchText} Covid19 Data
+        </div>
+    `;
+    html = html + `<div class="row">`;
+    for(let item in data){
+        html = html + `
+          <div id="countryData" class="col ${data[item].CSS}">
+        
+            <h5>${data[item].CASE_TYPE}</h5>
+            <h3 style="font-weight: bold">${data[item].CASE_COUNT}</h3>
+        
+          </div>
+        `;
+    }
+    html = html + `</div>`;
+
+    html = html + `
+            <div class="row" id="resourcesDiv">
+                <div  style="text-align: center">
+                    <h1 style="text-align: center; font-size: 24px">Resources</h1>
+                </div>
+        `;
+    const maxInd = resources.length > 5 ? 5 : resources.length;
+    for(let iterator = 0; iterator < maxInd; iterator++){
+        html = html + `
+            <div class="resource col-12 resourceBar">
+                <ul>
+                <li><b>Category</b>:  ${resources[iterator].CATEGORY}</li>
+                <li><b>Description</b>:  ${resources[iterator].DESCRIPTION}</li>
+                <li><b>Organisation</b>:  ${resources[iterator].ORGANISATION}</li>
+                <li><b>Contact</b>:  ${resources[iterator].CONTACT}</li>
+                <li><b>Phone</b>:  ${resources[iterator].PHONE}</li>
+                </ul>
+            </div>
+        `;
+    }
+
+    html = html + `</div>`;
+
+    html = html + `
+        <div class="resource col-12 resourceBar" style="text-align: center; font-size: 20px">
+            <p>For list of complete resources, Please check your state wise report.</p>
+        </div>
+    `;
+    dataDiv.insertAdjacentHTML('beforeend', html);
+}

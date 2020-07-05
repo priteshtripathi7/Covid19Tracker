@@ -1,0 +1,15 @@
+<div id="pageTitle" style="font-size: 30px">
+    Search About Your City...
+</div>
+
+<div>
+    <form class="col-sm-12">
+        <input class="col-sm-12 col-md-9" type="text" id="searchField" name="SearchField" placeholder="Enter City Name" list="cityList">
+        <datalist class="col-sm-12 col-md-9" id="cityList"></datalist>
+        <span class="col-md-1"></span>
+        <input id="searchBtn" type="submit" ng-click="searchBar()" class="btn btn-outline-secondary col-md-2" value="Search">
+    </form>
+    <div id="cityData">
+        <!-- TO BE Populated -->
+    </div>
+</div>
