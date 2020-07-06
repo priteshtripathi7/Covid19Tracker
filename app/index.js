@@ -1,5 +1,6 @@
 import * as CommonFunc from './modules/commonFunc.js';
 import * as ConfigDetails from './config.js';
+import * as AES from './AESConfig.js';
 
 const app = angular.module("app", ["ngRoute"]);
 
@@ -31,7 +32,132 @@ app.config(function ($routeProvider, $locationProvider) {
             controller: "knowMorePageCtrl"
         })
 
+        .when("/login", {
+            templateUrl: "pages/login.html",
+            controller: "loginFormCtrl"
+        })
+
+        .when("/signup", {
+            templateUrl: "pages/signup.html",
+            controller: "signUpFormCtrl"
+        })
+
+        .when("/signOut", {
+            templateUrl: "pages/signout.html",
+            controller: "signOutFormCtrl"
+        })
 });
+
+app.controller('navbarCtrl', function($scope) {
+    $scope.isLoggedIn = false;
+
+    $scope.$on('signedUp', function(event, args){
+        $scope.isLoggedIn = args.data;
+    });
+    
+    $scope.$on('loggedIn', function(event, args){
+        $scope.isLoggedIn = args.data;
+    });
+
+    $scope.$on('signedOut', function(event, args){
+        $scope.isLoggedIn = args.data;
+    });
+});
+
+app.controller('signOutFormCtrl', function($scope){
+
+    window.location.assign('http://192.168.0.102:8081/#/');
+    $scope.$emit('signedOut', {data: false});
+
+});
+
+app.controller('loginFormCtrl', function($scope){
+    $scope.loginClick = function(){
+        const username = document.querySelector('#username').value;
+        const password = document.querySelector('#pass').value;
+
+        if(username === '' || password === ''){
+            alert('Sorry! The credentials entered by you are not correct..');
+            return;
+        }
+
+        const requiredPassword = localStorage.getItem(username);
+        const decryptedPass = CommonFunc.decrypt(requiredPassword, AES.Key);
+
+        if(decryptedPass === password){
+            window.location.assign('http://192.168.0.102:8081/#/');
+            $scope.$emit('loggedIn', {data: true});
+        }else{
+            alert('Sorry! The credentials entered by you are not correct..');
+            return;
+        }
+    }
+});
+
+app.controller('signUpFormCtrl', function($scope){
+
+    $scope.signupClick = function(){
+
+        const username = document.querySelector('#username').value;
+        const password = document.querySelector('#pass').value;
+        const cnfPassword = document.querySelector('#cnf-pass').value;
+
+        if(username === '' || password === ''){
+            alert('Username or Password cannot be empty!');
+            return;
+        }
+
+        if(username.length < 5){
+            alert('Username must be 5 characters long.');
+            return;
+        }
+
+        let hasAdditional = false;
+        let hasNumber = false;
+        let hasAlph = false;
+        for(let iterator = 0; iterator < username.length; iterator++){
+            if(username[iterator] >= 'a' && username[iterator] <= 'z'){
+                hasAlph = true;
+            }else if(username[iterator] >= '0' && username[iterator] <= '9'){
+                hasNumber = true;
+            }
+            else{
+                allSmall = true;
+                break;
+            }
+        }
+
+        if(hasAdditional){
+            alert('Username must have only small alphabets and numbers');
+            return;
+        }
+        if(!hasAlph || !hasNumber){
+            alert('Username must have small alphabets and numbers');
+            return;
+        }
+
+        let passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+        if(!password.match(passw)){
+            alert("Password doesn't match required criterion..");
+            return;
+        }
+        if(password !== cnfPassword){
+            alert('Password and confirm Password dont match');
+            return;
+        }
+
+        if(localStorage.getItem(username) !== null){
+            alert('Username already exist');
+            return;
+        }
+        
+        const encryptedPass = CommonFunc.encrypt(password, AES.Key);
+        localStorage.setItem(username, encryptedPass);
+        window.location.assign('http://192.168.0.102:8081/#/');
+        $scope.$emit('signedUp', {data: true});
+    }
+});
+
 
 app.controller('indiaPageCtrl', function ($scope, $http) {
 

@@ -42,6 +42,27 @@ export function parseData(data){
 }
 
 /**
+ * Returns AES encrypted key;
+ * @param {*} message 
+ * @param {*} key 
+ */
+export function encrypt(message, key){
+    const encryptedText = CryptoJS.AES.encrypt(message, key);
+    return encryptedText.toString();
+}
+
+/**
+ * Returns decrypted msg of AES 
+ * @param {*} cipherText 
+ * @param {*} key 
+ */
+export function decrypt(cipherText, key){
+    const plainText =  CryptoJS.AES.decrypt(cipherText, key);
+    const decryptedMsg =  plainText.toString(CryptoJS.enc.Utf8);
+    return decryptedMsg.toString();
+}
+
+/**
  * Generates a download event
  * @param filename : required file name to be saved as
  * @param data : text to be written in the file

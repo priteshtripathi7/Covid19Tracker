@@ -156,6 +156,31 @@
   border-radius: 23px;
 }
 
+#loginForm{
+  text-align: center;
+  margin: 2rem 5rem;
+  padding: 0rem 2rem;
+}
+
+.inputField{
+  margin: 1rem 0rem;
+  font-size: 24px;
+  width: 60%;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid black;
+}
+
+.inputField:focus{
+  border:none;
+  outline: none;
+  border-bottom: 1px solid #28a745;
+}
+
+#formButton{
+  margin-top: 2rem;
+}
+
 /* For navbar */
 .navbar-brand {
   text-transform: uppercase;
