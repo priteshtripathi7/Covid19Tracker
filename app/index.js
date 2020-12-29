@@ -54,7 +54,7 @@ app.controller('navbarCtrl', function($scope) {
     $scope.$on('signedUp', function(event, args){
         $scope.isLoggedIn = args.data;
     });
-    
+
     $scope.$on('loggedIn', function(event, args){
         $scope.isLoggedIn = args.data;
     });
@@ -66,7 +66,15 @@ app.controller('navbarCtrl', function($scope) {
 
 app.controller('signOutFormCtrl', function($scope){
 
-    window.location.assign('http://192.168.0.102:8081/#/');
+    const currentWindowLocation = window.location.href;
+    let lastIndex;
+    for(let iter = currentWindowLocation.length - 1; iter >= 0; iter--) {
+        if (currentWindowLocation[iter] === '/') {
+            lastIndex = iter;
+            break;
+        }
+    }
+    window.location.href = currentWindowLocation.substring(0,lastIndex+1);
     $scope.$emit('signedOut', {data: false});
 
 });
@@ -82,14 +90,27 @@ app.controller('loginFormCtrl', function($scope){
         }
 
         const requiredPassword = localStorage.getItem(username);
+        if(requiredPassword === null){
+            alert('NO Such Username exist!');
+            return;
+        }
+
         const decryptedPass = CommonFunc.decrypt(requiredPassword, AES.Key);
 
         if(decryptedPass === password){
-            window.location.assign('http://192.168.0.102:8081/#/');
+            const currentWindowLocation = window.location.href;
+            let lastIndex;
+            for(let iter = currentWindowLocation.length - 1; iter >= 0; iter--) {
+                if (currentWindowLocation[iter] === '/') {
+                    lastIndex = iter;
+                    break;
+                }
+            }
+            console.log(currentWindowLocation.substring(0,lastIndex+1));
+            window.location.href = currentWindowLocation.substring(0,lastIndex+1);
             $scope.$emit('loggedIn', {data: true});
         }else{
             alert('Sorry! The credentials entered by you are not correct..');
-            return;
         }
     }
 });
@@ -122,7 +143,7 @@ app.controller('signUpFormCtrl', function($scope){
                 hasNumber = true;
             }
             else{
-                allSmall = true;
+                hasAdditional = true;
                 break;
             }
         }
@@ -150,10 +171,19 @@ app.controller('signUpFormCtrl', function($scope){
             alert('Username already exist');
             return;
         }
-        
+
         const encryptedPass = CommonFunc.encrypt(password, AES.Key);
         localStorage.setItem(username, encryptedPass);
-        window.location.assign('http://192.168.0.102:8081/#/');
+
+        const currentWindowLocation = window.location.href;
+        let lastIndex;
+        for(let iter = currentWindowLocation.length - 1; iter >= 0; iter--) {
+            if (currentWindowLocation[iter] === '/') {
+                lastIndex = iter;
+                break;
+            }
+        }
+        window.location.href = currentWindowLocation.substring(0,lastIndex+1);
         $scope.$emit('signedUp', {data: true});
     }
 });
@@ -170,6 +200,7 @@ app.controller('indiaPageCtrl', function ($scope, $http) {
     $scope.stateCodeMap = {
         'INDIA': 'India'
     };
+    $scope.chartTimeLine = 'Monthly'
 
     let confirmedChart, recoveredChart, activeChart, deceasedChart;
 
@@ -389,6 +420,7 @@ app.controller('indiaPageCtrl', function ($scope, $http) {
                 }]
             },
         });
+        document.querySelector('#confirmedSpan').textContent = $scope.chartData.TOTAL_CONFIRMED[$scope.chartData.TOTAL_CONFIRMED.length - 1] - $scope.chartData.TOTAL_CONFIRMED[0];
 
         const ctxActive = document.getElementById('activeChart').getContext('2d');
         activeChart = new Chart(ctxActive, {
@@ -404,6 +436,7 @@ app.controller('indiaPageCtrl', function ($scope, $http) {
                 }]
             },
         });
+        document.querySelector('#activeSpan').textContent = $scope.chartData.TOTAL_ACTIVE[$scope.chartData.TOTAL_ACTIVE.length - 1] - $scope.chartData.TOTAL_ACTIVE[0];
 
         const ctxRecovered = document.getElementById('recoveredChart').getContext('2d');
         recoveredChart = new Chart(ctxRecovered, {
@@ -419,6 +452,7 @@ app.controller('indiaPageCtrl', function ($scope, $http) {
                 }]
             },
         });
+        document.querySelector('#recoveredSpan').textContent = $scope.chartData.TOTAL_RECOVERED[$scope.chartData.TOTAL_RECOVERED.length - 1] - $scope.chartData.TOTAL_RECOVERED[0];
 
         const ctxDeceased = document.getElementById('deceasedChart').getContext('2d');
         deceasedChart = new Chart(ctxDeceased, {
@@ -434,6 +468,8 @@ app.controller('indiaPageCtrl', function ($scope, $http) {
                 }]
             },
         });
+        document.querySelector('#deceasedSpan').textContent = $scope.chartData.TOTAL_DECEASED[$scope.chartData.TOTAL_DECEASED.length - 1] - $scope.chartData.TOTAL_DECEASED[0];
+
     }
 
     $scope.changeChartDisplayToDaily = function () {
@@ -469,6 +505,8 @@ app.controller('indiaPageCtrl', function ($scope, $http) {
                 }
             }
         });
+        document.querySelector('#confirmedSpan').textContent = $scope.chartData.TOTAL_CONFIRMED[$scope.chartData.TOTAL_CONFIRMED.length - 1] - $scope.chartData.TOTAL_CONFIRMED[0];
+
 
         const ctxActive = document.getElementById('activeChart').getContext('2d');
         activeChart = new Chart(ctxActive, {
@@ -490,6 +528,8 @@ app.controller('indiaPageCtrl', function ($scope, $http) {
                 }
             }
         });
+        document.querySelector('#activeSpan').textContent = $scope.chartData.TOTAL_ACTIVE[$scope.chartData.TOTAL_ACTIVE.length - 1] - $scope.chartData.TOTAL_ACTIVE[0];
+
 
         const ctxRecovered = document.getElementById('recoveredChart').getContext('2d');
         recoveredChart = new Chart(ctxRecovered, {
@@ -511,6 +551,8 @@ app.controller('indiaPageCtrl', function ($scope, $http) {
                 }
             }
         });
+        document.querySelector('#recoveredSpan').textContent = $scope.chartData.TOTAL_RECOVERED[$scope.chartData.TOTAL_RECOVERED.length - 1] - $scope.chartData.TOTAL_RECOVERED[0];
+
 
         const ctxDeceased = document.getElementById('deceasedChart').getContext('2d');
         deceasedChart = new Chart(ctxDeceased, {
@@ -532,10 +574,11 @@ app.controller('indiaPageCtrl', function ($scope, $http) {
                 }
             }
         });
+        document.querySelector('#deceasedSpan').textContent = $scope.chartData.TOTAL_DECEASED[$scope.chartData.TOTAL_DECEASED.length - 1] - $scope.chartData.TOTAL_DECEASED[0];
+
     }
 
     $scope.generateStateReport = function (stateName) {
-
         $http.get('https://api.covid19india.org/state_district_wise.json\n')
             .then(
                 function (result) {
@@ -839,12 +882,12 @@ app.controller('knowMorePageCtrl', function($scope, $http){
     $scope.searchBar = function(){
         if($scope.isQueryProcessing)
             return;
-        
+
         const searchText = document.querySelector('#searchField').value;
-        
+
         if(searchText === '')
             return;
-            
+
         $scope.isQueryProcessing = true;
         const caseData = [];
 

@@ -48,6 +48,7 @@ export function parseData(data){
  */
 export function encrypt(message, key){
     const encryptedText = CryptoJS.AES.encrypt(message, key);
+    console.log(encryptedText);
     return encryptedText.toString();
 }
 
